@@ -1,5 +1,5 @@
 /*!
- * BMAX face engine — extracted from bloub (https://github.com/jeremy-prt/bloub),
+ * Baymax face engine — extracted from bloub (https://github.com/jeremy-prt/bloub),
  * src/bot/ and src/ui/gaze.ts only, types stripped and bundled into one script.
  * Do not edit by hand: regenerate with: node tools/bundle-bloub.mjs <path-to-bloub-clone> bot.js
  *
