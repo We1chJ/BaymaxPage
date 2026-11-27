@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BMAX</title>
+<meta name="description" content="BMAX — a tiny robot with a big face.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='90' fill='%230a0a0a'/%3E%3Crect x='65' y='70' width='22' height='48' rx='11' fill='white'/%3E%3Crect x='113' y='70' width='22' height='48' rx='11' fill='white'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --ink: #0a0a0a;
+    --muted: #6b6b6b;
+    --sans: "Space Grotesk", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; }
+  ::selection { background: var(--ink); color: var(--bg); }
+
+  /* ---------- nav ---------- */
+  .nav {
+    position: fixed; inset: 0 0 auto 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px clamp(16px, 4vw, 48px);
+    font-family: var(--mono); font-size: 13px;
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 500; letter-spacing: .08em; }
+  .brand svg { width: 24px; height: 24px; }
+  .nav ul { display: flex; gap: clamp(14px, 3vw, 32px); list-style: none; }
+  .nav ul a { text-decoration: none; position: relative; }
+  .nav ul a::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 1.5px;
+    background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform .25s ease;
+  }
+  .nav ul a:hover::after { transform: scaleX(1); }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative; min-height: 100svh; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 clamp(16px, 4vw, 48px) clamp(24px, 4vw, 44px);
+  }
+  /* the viewBox is 1.58x the ball radius on each side, to leave room for rings */
+  .face-stage {
+    position: absolute; left: 50%; top: 46%;
+    width: min(98vh, 104vw, 1080px);
+    transform: translate(-50%, -50%);
+  }
+  .face-stage svg { width: 100%; height: auto; display: block; cursor: pointer; }
+
+  /* no z-index here: the title has to blend with the face behind it */
+  .hero-copy {
+    position: relative;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+  }
+  .hero h1 {
+    font-size: clamp(64px, 14vw, 200px); font-weight: 700; line-height: .82; letter-spacing: -.05em;
+    color: #fff; mix-blend-mode: difference;
+  }
+  .hero .tag { font-family: var(--mono); font-size: 13px; color: var(--muted); margin-top: 14px; max-width: 34ch; line-height: 1.6; }
+  .state-label { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .state-label b { color: var(--ink); font-weight: 500; }
+
+  footer {
+    border-top: 1.5px solid var(--ink); padding: 28px clamp(16px, 4vw, 48px);
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+  }
+
+  @media (max-width: 640px) {
+    .face-stage { top: 36%; width: 116vw; }
+  }
+
+  /* ---------- load: the face fades in first, then the text ---------- */
+  @keyframes fade-in { from { opacity: 0; } }
+  @keyframes rise-in { from { opacity: 0; transform: translateY(12px); } }
+  .face-stage { animation: fade-in 1s ease-out both; }
+  .nav, .hero h1, .hero .tag, .state-label, footer { animation: rise-in .7s ease-out both; }
+  .nav { animation-delay: .8s; }
+  .hero h1 { animation-delay: .9s; }
+  .hero .tag { animation-delay: 1.05s; }
+  .state-label, footer { animation-delay: 1.2s; }
+  @media (prefers-reduced-motion: reduce) {
+    .face-stage, .nav, .hero h1, .hero .tag, .state-label, footer { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="brand" href="#top" aria-label="BMAX home">
+    <svg viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="92" fill="#0a0a0a"/><rect x="63" y="66" width="24" height="54" rx="12" fill="#fff"/><rect x="113" y="66" width="24" height="54" rx="12" fill="#fff"/></svg>
+    BMAX
+  </a>
+  <ul>
+    <li><a href="m1.html">M1</a></li>
+    <li><a href="https://github.com/" target="_blank" rel="noopener">GitHub ↗</a></li>
+  </ul>
+</nav>
+
+<header class="hero" id="top">
+  <div class="face-stage">
+    <svg id="hero-face" role="img" aria-label="BMAX robot face — click to see its next animation"></svg>
+  </div>
+  <div class="hero-copy">
+    <div>
+      <h1>BMAX</h1>
+      <p class="tag">A tiny robot with a big face. Move your cursor — it's watching. Click it to see what it does next.</p>
+    </div>
+    <div class="state-label">state: <b id="state-name">idle</b></div>
+  </div>
+</header>
+
+<footer>
+  <span>© <span id="year"></span> BMAX</span>
+  <span>face engine from <a href="https://github.com/jeremy-prt/bloub" target="_blank" rel="noopener">bloub</a> (MIT)</span>
+</footer>
+
+<script src="bot.js"></script>
+<script>
+(() => {
+  // Vanilla port of bloub's BloubBot.vue renderer: the engine (bot.js) computes
+  // each frame, this only writes it into the SVG.
+  const B = window.BloubBot;
+  const NS = "http://www.w3.org/2000/svg";
+  const INK = "#0a0a0a", PAPER = "#ffffff";
+  const R = B.RAYON, VB = B.DEMI_VIEWBOX;
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const el = (tag, attrs = {}, parent) => {
+    const n = document.createElementNS(NS, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+  const setAttrs = (n, attrs) => { for (const k in attrs) n.setAttribute(k, attrs[k]); };
+  // keep exactly `count` children of `tag` in `parent`, reusing what is there
+  function sync(parent, count, tag) {
+    const kids = parent.children;
+    while (kids.length > count) parent.lastChild.remove();
+    for (let i = 0; i < count; i++) {
+      const t = typeof tag === "function" ? tag(i) : tag;
+      if (!kids[i]) el(t, {}, parent);
+      else if (kids[i].tagName !== t) parent.replaceChild(el(t), kids[i]);
+    }
+    return kids;
+  }
+
+  // ---------- scene ----------
+  const svg = document.getElementById("hero-face");
+  svg.setAttribute("viewBox", `${-VB} ${-VB} ${VB * 2} ${VB * 2}`);
+  const uid = "bm";
+  const defs = el("defs", {}, svg);
+  const mask = el("mask", { id: `${uid}-mask`, maskUnits: "userSpaceOnUse", x: -VB, y: -VB, width: VB * 2, height: VB * 2 }, defs);
+  const maskBody = el("path", { fill: "#fff" }, mask);
+  const maskEyes = el("g", { fill: "#000" }, mask);
+  const maskNotch = el("circle", { fill: "#000" }, mask);
+  const grads = el("g", {}, defs);
+  const arcsBack = el("g", { fill: "none", "stroke-linecap": "round" }, svg);
+  const dotsBack = el("g", {}, svg);
+  const body = el("g", {}, svg);
+  const bodyPaper = el("path", { fill: PAPER }, body);
+  el("rect", { x: -VB, y: -VB, width: VB * 2, height: VB * 2, fill: INK }, el("g", { mask: `url(#${uid}-mask)` }, body));
+  const dotsFront = el("g", {}, svg);
+  const notif = el("circle", { fill: B.NOTIF_BLUE }, svg);
+  const arcsFront = el("g", { fill: "none", "stroke-linecap": "round" }, svg);
+
+  function dotAttrs(dot) {
+    const fill = dot.color ?? (dot.depth === undefined ? INK : B.mixHex(PAPER, INK, dot.depth));
+    return dot.d
+      ? { fill, opacity: dot.opacity, d: dot.d, transform: `translate(${dot.x} ${dot.y}) rotate(${dot.rot ?? 0}) scale(${R})` }
+      : { fill, opacity: dot.opacity, cx: dot.x, cy: dot.y, r: dot.r };
+  }
+
+  function draw(f) {
+    maskBody.setAttribute("d", f.bodyPath);
+    bodyPaper.setAttribute("d", f.bodyPath);
+    body.setAttribute("opacity", f.bodyAlpha);
+    const eyes = sync(maskEyes, f.eyes.length, "path");
+    f.eyes.forEach((e, i) => setAttrs(eyes[i], { d: e.d, transform: e.matrix, opacity: e.alpha }));
+    if (f.notch) setAttrs(maskNotch, { cx: f.notch.x, cy: f.notch.y, r: f.notch.r, display: "" });
+    else maskNotch.setAttribute("display", "none");
+
+    const gs = sync(grads, f.arcs.length, "linearGradient");
+    const back = sync(arcsBack, f.arcs.length, "path"), front = sync(arcsFront, f.arcs.length, "path");
+    f.arcs.forEach((a, i) => {
+      const id = `${uid}-${a.id}`;
+      setAttrs(gs[i], { id, gradientUnits: "userSpaceOnUse", x1: a.grad.x1, y1: a.grad.y1, x2: a.grad.x2, y2: a.grad.y2 });
+      const stops = sync(gs[i], a.grad.stops.length, "stop");
+      a.grad.stops.forEach((c, j) => setAttrs(stops[j], { offset: j / (a.grad.stops.length - 1), "stop-color": c }));
+      const common = { stroke: `url(#${id})`, "stroke-width": a.width, opacity: a.opacity };
+      setAttrs(back[i], { ...common, d: a.back });
+      setAttrs(front[i], { ...common, d: a.front });
+    });
+
+    const [on, off] = f.dotsBehind ? [dotsBack, dotsFront] : [dotsFront, dotsBack];
+    sync(off, 0, "circle");
+    const dots = sync(on, f.dots.length, (i) => (f.dots[i].d ? "path" : "circle"));
+    f.dots.forEach((d, i) => setAttrs(dots[i], dotAttrs(d)));
+
+    if (f.notif) setAttrs(notif, { cx: f.notif.x, cy: f.notif.y, r: f.notif.r, display: "" });
+    else notif.setAttribute("display", "none");
+  }
+
+  // ---------- playback: bloub's default cycle, one state after another ----------
+  const blocks = B.defaultCycle().blocks;
+  const engine = new B.BotEngine(R, blocks[0].state, null, B.EXPRESSION_BY_ID.get(B.DEFAULT_EXPRESSION) ?? null);
+  const stateName = document.getElementById("state-name");
+  let clock = 0, last = 0, block = 0, nextAt = blocks[0].duration;
+
+  function goTo(i) {
+    block = i;
+    engine.setState(blocks[i].state, clock);
+    nextAt = clock + blocks[i].duration;
+    stateName.textContent = blocks[i].state;
+  }
+  svg.addEventListener("click", () => goTo((block + 1) % blocks.length));
+
+  // ---------- gaze ----------
+  // Arrival: the ball spins once on load (bloub's tourLook), then the eyes
+  // follow the pointer on states that show the resting face.
+  const SCRIPT_MORPH = 1 / 60;
+  let touring = !reduceMotion;
+  if (touring) engine.setLook(B.tourLook(0), -SCRIPT_MORPH, SCRIPT_MORPH);
+
+  let pointer = null, aiming = false;
+  addEventListener("pointermove", (e) => { if (e.pointerType !== "touch") pointer = { x: e.clientX, y: e.clientY }; }, { passive: true });
+  document.addEventListener("pointerleave", () => { pointer = null; });
+
+  function aim() {
+    const box = svg.getBoundingClientRect();
+    if (!pointer || !B.STATE_BY_ID.get(engine.state)?.baseFace || !box.width) {
+      if (aiming) { engine.setLook(null, clock, 0.6); aiming = false; }
+      return;
+    }
+    const nx = B.clamp((pointer.x - (box.left + box.width / 2)) / Math.max(1, innerWidth / 2), -1, 1);
+    const ny = B.clamp((pointer.y - (box.top + box.height / 2)) / Math.max(1, innerHeight / 2), -1, 1);
+    engine.setLook({ yaw: nx * B.YAW_MAX, pitch: -ny * B.PITCH_MAX, mix: 1, spin: 0, wander: 0 }, clock);
+    aiming = true;
+  }
+
+  // ---------- loop ----------
+  function tick(ms) {
+    requestAnimationFrame(tick);
+    const dt = last ? Math.min((ms - last) / 1000, 0.064) : 0;
+    last = ms;
+    clock += dt;
+    if (clock >= nextAt) goTo((block + 1) % blocks.length);
+    if (touring) {
+      engine.setLook(B.tourLook(clock), clock, SCRIPT_MORPH);
+      if (clock >= B.TOUR_TIME) touring = false; // the script ends at mix 0: nothing to release
+    } else aim();
+    draw(engine.sample(clock));
+  }
+  draw(engine.sample(0));
+  requestAnimationFrame(tick);
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
