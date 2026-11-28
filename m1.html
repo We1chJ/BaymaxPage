@@ -62,6 +62,14 @@
   table { border-collapse: collapse; width: 100%; font-size: 14px; }
   th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid #e4e4e4; }
   th { border-bottom: 1.5px solid var(--ink); }
+  .diagram { overflow-x: auto; margin: 10px 0; }
+  .diagram svg { display: block; width: 100%; min-width: 640px; height: auto; font-family: var(--sans); }
+  .diagram .box { fill: #fff; stroke: var(--ink); stroke-width: 1.5; }
+  .diagram .group { fill: #f5f5f5; stroke: var(--ink); stroke-width: 1; stroke-dasharray: 5 4; }
+  .diagram .t { font-size: 13px; font-weight: 500; fill: var(--ink); }
+  .diagram .s { font-size: 11px; fill: var(--muted); }
+  .diagram .col { font-family: var(--mono); font-size: 11px; fill: var(--muted); letter-spacing: .08em; }
+  .diagram .arrow { stroke: var(--ink); stroke-width: 1.5; fill: none; }
 
   footer {
     border-top: 1.5px solid var(--ink); padding: 28px clamp(16px, 4vw, 48px);
@@ -78,7 +86,7 @@
   </a>
   <ul>
     <li><a href="m1.html" aria-current="page">M1</a></li>
-    <li><a href="https://github.com/" target="_blank" rel="noopener">GitHub ↗</a></li>
+    <li><a href="https://github.com/We1chJ/Baymax" target="_blank" rel="noopener">GitHub ↗</a></li>
   </ul>
 </nav>
 
@@ -87,6 +95,81 @@
 
   <h2>MVP</h2>
   <p>Our MVP is Navi, a desktop healthcare robot built by Jack Wei, Thanadetch Mateedunsatits and Luke Wei. Sitting on a desk, it measures a person's heart rate and breathing rate without touching them, using two sources: rPPG (remote photoplethysmography, which reads the pulse from tiny color changes in the face on camera) and a 60 GHz mmWave radar sensor. It asks the user to log their mood, shows its reading of their vitals on a small touchscreen face, and responds with comforting voice lines and conversation.</p>
+
+  <h2>System Overview</h2>
+  <figure class="diagram">
+    <svg viewBox="0 0 760 450" role="img" aria-label="System diagram: the camera, mmWave sensor, PPG sensor, touchscreen and microphone feed the Raspberry Pi 5 and laptop running ROS 2, where the rPPG pipeline, sensor fusion, FSM and voice pipeline drive the display and speaker.">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill="#0a0a0a"/>
+        </marker>
+      </defs>
+
+      <text class="col" x="10" y="14">INPUTS</text>
+      <text class="col" x="230" y="14">PROCESSING</text>
+      <text class="col" x="580" y="14">OUTPUTS</text>
+
+      <!-- inputs -->
+      <rect class="box" x="10" y="40" width="170" height="50" rx="8"/>
+      <text class="t" x="22" y="61">Arducam camera</text><text class="s" x="22" y="78">video for rPPG</text>
+      <rect class="box" x="10" y="110" width="170" height="50" rx="8"/>
+      <text class="t" x="22" y="131">mmWave radar</text><text class="s" x="22" y="148">MR60BHA2 · ESP32 bridge</text>
+      <rect class="box" x="10" y="180" width="170" height="50" rx="8"/>
+      <text class="t" x="22" y="201">PPG sensor</text><text class="s" x="22" y="218">SparkFun · validation</text>
+      <rect class="box" x="10" y="250" width="170" height="50" rx="8"/>
+      <text class="t" x="22" y="271">Touchscreen + buttons</text><text class="s" x="22" y="288">mood score, wake, fallback</text>
+      <rect class="box" x="10" y="320" width="170" height="50" rx="8"/>
+      <text class="t" x="22" y="341">Microphone</text><text class="s" x="22" y="358">INMP441</text>
+
+      <!-- processing -->
+      <rect class="group" x="220" y="24" width="320" height="410" rx="12"/>
+      <text class="s" x="236" y="420">Raspberry Pi 5 + laptop · ROS 2</text>
+      <rect class="box" x="245" y="45" width="270" height="44" rx="8"/>
+      <text class="t" x="259" y="64">rPPG pipeline</text><text class="s" x="259" y="80">heart rate from the face</text>
+      <rect class="box" x="245" y="130" width="270" height="44" rx="8"/>
+      <text class="t" x="259" y="149">Sensor fusion</text><text class="s" x="259" y="165">Kalman filter · rPPG + mmWave</text>
+      <rect class="box" x="245" y="215" width="270" height="62" rx="8"/>
+      <text class="t" x="259" y="236">FSM</text><text class="s" x="259" y="253">Sleep · Idle · Active · Ask mood</text><text class="s" x="259" y="268">Talking · Diagnose</text>
+      <rect class="box" x="245" y="320" width="270" height="62" rx="8"/>
+      <text class="t" x="259" y="341">Voice pipeline</text><text class="s" x="259" y="358">Whisper → Llama 3.2 → Omnivoice</text><text class="s" x="259" y="373">transcribe · respond · speak</text>
+
+      <!-- outputs -->
+      <rect class="box" x="580" y="210" width="170" height="56" rx="8"/>
+      <text class="t" x="592" y="233">Display</text><text class="s" x="592" y="250">XPT2046 · face, vitals</text>
+      <rect class="box" x="580" y="320" width="170" height="56" rx="8"/>
+      <text class="t" x="592" y="343">Speaker</text><text class="s" x="592" y="360">MAX98357A · voice lines</text>
+
+      <!-- arrows -->
+      <path class="arrow" marker-end="url(#arrowhead)" d="M180 65 L245 67"/>
+      <path class="arrow" marker-end="url(#arrowhead)" d="M180 135 L245 146"/>
+      <path class="arrow" marker-end="url(#arrowhead)" d="M180 205 L245 160"/>
+      <path class="arrow" marker-end="url(#arrowhead)" d="M380 89 L380 130"/>
+      <path class="arrow" marker-end="url(#arrowhead)" d="M380 174 L380 215"/>
+      <path class="arrow" marker-end="url(#arrowhead)" d="M180 275 L245 252"/>
+      <path class="arrow" marker-end="url(#arrowhead)" d="M180 345 L245 350"/>
+      <path class="arrow" marker-start="url(#arrowhead)" marker-end="url(#arrowhead)" d="M380 277 L380 320"/>
+      <path class="arrow" marker-end="url(#arrowhead)" d="M515 246 L580 238"/>
+      <path class="arrow" marker-end="url(#arrowhead)" d="M515 351 L580 348"/>
+    </svg>
+    <figcaption>How Navi's parts connect. The heavier models (rPPG, LLM, voice) may run on a laptop instead of the Pi 5.</figcaption>
+  </figure>
+
+  <h2>Milestone 1 Goals from Our Proposal</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Goal</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ROS setup on Raspberry Pi 5</td><td>Done (Raspberry Pi 5 setup)</td></tr>
+        <tr><td>Test out mmWave sensor</td><td>Testing (see mmWave photo below)</td></tr>
+        <tr><td>Test out microphone/speaker connection (on an ESP/Rasp system, .ino files, no communication bridge yet)</td><td>Troubleshooting (see microphone/speaker photo below)</td></tr>
+        <tr><td>rPPG tested</td><td>Testing (proven on laptop cam, see rPPG photo below)</td></tr>
+        <tr><td>Send data from mmWave sensor to Raspberry Pi and also laptop</td><td>Testing</td></tr>
+        <tr><td>Create ROS skeleton of the FSM</td><td>Not started</td></tr>
+      </tbody>
+    </table>
+  </div>
 
   <h2>Updates to MVP and Stretch Goals</h2>
   <h3>MVP</h3>
