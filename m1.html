@@ -48,16 +48,20 @@
   .nav ul a:hover::after, .nav ul a[aria-current="page"]::after { transform: scaleX(1); }
 
   /* ---------- page ---------- */
-  main { max-width: 720px; margin: 0 auto; padding: 48px clamp(16px, 4vw, 32px) 96px; }
-  h1 { font-size: 40px; letter-spacing: -.03em; margin-bottom: 8px; }
+  main { max-width: 760px; margin: 0 auto; padding: 48px clamp(16px, 4vw, 32px) 96px; }
+  h1 { font-size: 40px; letter-spacing: -.03em; margin-bottom: 12px; }
   h2 { font-size: 22px; letter-spacing: -.01em; margin: 44px 0 12px; }
   h3 { font-size: 16px; margin: 20px 0 6px; }
   p { margin-bottom: 10px; }
-  ul { padding-left: 20px; }
+  ul { padding-left: 20px; margin-bottom: 10px; }
   li { margin-bottom: 6px; }
   figure { margin: 10px 0 18px; }
   figure img { display: block; max-width: 100%; max-height: 420px; height: auto; border: 1px solid #e4e4e4; }
   figcaption { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .table-wrap { overflow-x: auto; margin: 10px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid #e4e4e4; }
+  th { border-bottom: 1.5px solid var(--ink); }
 
   footer {
     border-top: 1.5px solid var(--ink); padding: 28px clamp(16px, 4vw, 48px);
@@ -81,12 +85,35 @@
 <main>
   <h1>Milestone 1</h1>
 
+  <h2>About the Project</h2>
+  <p>Navi is a desktop healthcare robot built by Jack Wei, Thanadetch Mateedunsatits and Luke Wei. Sitting on a desk, it measures a person's heart rate and breathing rate without touching them, using two sources: rPPG (remote photoplethysmography, which reads the pulse from tiny color changes in the face on camera) and a 60 GHz mmWave radar sensor. It asks the user to log their mood, shows its reading of their vitals on a small touchscreen face, and responds with comforting voice lines and conversation.</p>
+  <p>Navi is our MVP. Our stretch goal is to grow it into Baymax from Big Hero 6, which is where this site gets its name: the same sensing and mood tracking, plus soft, tendon-driven arms that can give a hug.</p>
+  <p>This page reports where the project stands at Milestone 1 and our plan for Milestone 2.</p>
+
   <h2>Updates to MVP and Stretch Goals</h2>
   <h3>MVP</h3>
-  <p>[VALIDATE] Prompt the User to ask to put their thumb on the PPG sensor in order to get super accurate data on the user's health biometrics.</p>
-  <p>Reasoning: because we needed a way to validate the data. We received a sparksfun PPG sensor from Chavvi, which we will implement into the build as a validation source for testing and a calibration unit in the final design.</p>
-  <h3>Stretch</h3>
-  <p>The same.</p>
+  <p>The MVP from our proposal:</p>
+  <ul>
+    <li>[SENSING ENGINE] Measure heart rate and breathing rate with the mmWave sensor and/or rPPG, and make decisions from there. If rPPG fails, fall back to the mmWave sensor (MR60BHA2), which we know works.</li>
+    <li>[ASK MOOD] On the display, ask the user to rate their mood from 1 to 10.</li>
+    <li>[DIAGNOSE] Using the sensors and camera, display the robot's current understanding of the user's mood and other metrics.</li>
+    <li>[COMFORT] Voice lines to calm and comfort the user.</li>
+    <li>[COMMUNICATE] Talk with the user like a normal AI assistant.</li>
+  </ul>
+  <p><strong>New since the proposal:</strong></p>
+  <ul>
+    <li>[VALIDATE] Prompt the user to put their thumb on the PPG sensor in order to get super accurate data on the user's health biometrics.</li>
+  </ul>
+  <p>Reasoning: we needed a way to validate the data. We received a SparkFun PPG sensor from Prof. Chhavi Goenka, which we will implement into the build as a validation source for testing and a calibration unit in the final design.</p>
+
+  <h3>Stretch Goals</h3>
+  <p>Our stretch goals are unchanged from our proposal. Everything in the MVP carries over to Baymax (the mmWave-rPPG sensing pipeline, mood tracking and the display), and we add:</p>
+  <ul>
+    <li>SpiRob-inspired, tendon-driven arms</li>
+    <li>High-power servos to control these arms</li>
+    <li>Control logic (PID and others) to create a hugging arm motion</li>
+    <li>Inflatable arms and an inflatable body</li>
+  </ul>
 
   <h2>Status of Computational / Hardware Set-up</h2>
   <p>All hardware sourced. All hardware booted up.</p>
@@ -97,21 +124,27 @@
         <figcaption>rPPG reading 75 BPM from a webcam feed.</figcaption>
       </figure>
     </li>
-    <li>Microphone Speaker: tested (+code)
+    <li>Microphone Speaker (INMP441 microphone, MAX98357A amplifier, 2W 8 Ohm speaker): tested (+code)
       <figure>
         <img src="images/m1/mic-speaker-setup.webp" alt="Breadboard with an ESP32, an INMP441 microphone and a MAX98357A amplifier wired to a small speaker">
         <figcaption>INMP441 microphone and MAX98357A amplifier driving the speaker from an ESP32.</figcaption>
       </figure>
     </li>
-    <li>mmWave sensor: booted up
+    <li>mmWave sensor (MR60BHA2): booted up
       <figure>
         <img src="images/m1/mmwave-heart-rate.png" alt="Arduino sketch for the mmWave sensor and its serial monitor printing heart rate values between 89 and 98">
         <figcaption>MR60BHA2 test sketch printing heart rate over serial.</figcaption>
       </figure>
     </li>
     <li>Raspberry Pi 5: booted up</li>
-    <li>XPT2064; 3.5 inch display: booted up</li>
-    <li>PPG sensor: sourced (to code)</li>
+    <li>XPT2046 3.5 inch touchscreen display: booted up</li>
+    <li>Arducam camera: being integrated</li>
+    <li>SparkFun PPG sensor: sourced (to code)</li>
+  </ul>
+  <h3>Physical hardware and peripherals</h3>
+  <ul>
+    <li>Mechanical enclosure (3D printed): not built yet, planned for Milestone 2. It has to hold the Pi, display, camera, mmWave sensor, PPG sensor, microphone and speaker.</li>
+    <li>Wake button and potentiometer buttons: planned. The wake button wakes Navi from sleep and doubles as the on/off switch so it never measures anyone without permission; the potentiometer buttons are the fallback controls if voice recognition fails.</li>
   </ul>
 
   <h2>Major Components and Status</h2>
@@ -128,14 +161,20 @@
 
   <h2>Risks to Reaching MVP</h2>
   <ul>
-    <li>Need to setup PPG sensor to validate data</li>
-    <li>rPPG sensor still needs to be validated</li>
+    <li>Need to setup PPG sensor to validate data.</li>
+    <li>rPPG sensor still needs to be validated.</li>
+    <li>Integration: each part works on its own (rPPG on a laptop, mmWave and audio on ESP32 boards), but none run together yet. Getting them talking to the FSM on one system is the biggest unknown.</li>
+    <li>Compute: rPPG, any other CV model, Whisper, the LLM and voice generation may be too much for the Raspberry Pi 5 at once. Fallback: run the heavier models on a laptop.</li>
+    <li>Sensor fusion: rPPG and mmWave report at different rates, so fusing them takes time-alignment work before any filtering.</li>
+    <li>Audio: the microphone pipeline is still in troubleshooting. Fallback: potentiometer buttons for controls instead of voice commands.</li>
+    <li>Enclosure: the camera needs a clear view of the face and the mmWave sensor a clear line of sight to the chest, and both have to fit around the display. A poor fit could mean reprinting.</li>
+    <li>Schedule: Milestone 2 is 10 days after this update, and the enclosure, FSM and voice pipeline all land in that window.</li>
   </ul>
 
-  <h2>Goals for Milestone 2</h2>
+  <h2>Goals for Milestone 2 (December 7)</h2>
   <h3>Electro-Mechanical Ends</h3>
   <ul>
-    <li>Created mechanical enclosure for the assistant</li>
+    <li>Create the mechanical enclosure for the assistant</li>
     <li>Setup PPG sensor</li>
     <li>Hardware fully 3D printed</li>
     <li>Fully completed electro-mechanical aspect</li>
@@ -146,8 +185,29 @@
     <li>Look into fusing data from rPPG to mmWave</li>
     <li>Have voicelines setup, have LLM logic setup, have microphone, speaker system setup</li>
     <li>Setup voice commands</li>
-    <li>Default to potentiometer buttons if voice recognition fails for controls; Removal of the microphone pipeline</li>
+    <li>Default to potentiometer buttons if voice recognition fails for controls; removal of the microphone pipeline</li>
   </ul>
+
+  <h3>Plan and checkpoints</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Checkpoint</th><th>Goal</th><th>Owner</th><th>Done when</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Mon, Nov 30</td><td>PPG sensor set up</td><td>Detch</td><td>PPG heart rate reads on the Pi or ESP32 and is logged next to rPPG for the same person</td></tr>
+        <tr><td>Mon, Nov 30</td><td>rPPG on the Arducam</td><td>Luke</td><td>rPPG runs on the Arducam feed instead of the laptop camera</td></tr>
+        <tr><td>Mon, Nov 30</td><td>Display face and mood screen</td><td>Jack</td><td>The touchscreen shows the face and a 1–10 mood prompt that records the answer</td></tr>
+        <tr><td>Mon, Nov 30</td><td>Enclosure design</td><td>Detch</td><td>Enclosure CAD done, with mounts for every part, and first print started</td></tr>
+        <tr><td>Thu, Dec 3</td><td>FSM halfway</td><td>Luke</td><td>Sleep, Idle, Active and Ask_mood states run and switch on real inputs</td></tr>
+        <tr><td>Thu, Dec 3</td><td>Voice pipeline</td><td>Detch</td><td>Speech in, Whisper, LLM, Omnivoice out works end to end</td></tr>
+        <tr><td>Thu, Dec 3</td><td>Validation data</td><td>Jack</td><td>Apple Watch export script works and one session is recorded against rPPG, mmWave and PPG</td></tr>
+        <tr><td>Mon, Dec 7</td><td>Hardware complete</td><td>Detch</td><td>All parts mounted in the printed enclosure and powered</td></tr>
+        <tr><td>Mon, Dec 7</td><td>FSM and voice commands</td><td>Luke and Detch</td><td>Talking and Diagnose states added; voice commands trigger states, or potentiometer buttons do if voice recognition fails</td></tr>
+        <tr><td>Mon, Dec 7</td><td>Sensor fusion investigation</td><td>Detch</td><td>rPPG and mmWave readings are time-aligned and compared, with a decision on whether to fuse them</td></tr>
+      </tbody>
+    </table>
+  </div>
 </main>
 
 <footer>© <span id="year"></span> Baymax</footer>
