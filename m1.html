@@ -14,8 +14,6 @@
     --bg: #ffffff;
     --ink: #0a0a0a;
     --muted: #6b6b6b;
-    --line: #e4e4e4;
-    --new: #1a7f37;
     --sans: "Space Grotesk", system-ui, sans-serif;
     --mono: "JetBrains Mono", ui-monospace, monospace;
   }
@@ -25,7 +23,7 @@
     color: var(--ink);
     font-family: var(--sans);
     -webkit-font-smoothing: antialiased;
-    line-height: 1.55;
+    line-height: 1.6;
   }
   a { color: inherit; }
   ::selection { background: var(--ink); color: var(--bg); }
@@ -50,40 +48,16 @@
   .nav ul a:hover::after, .nav ul a[aria-current="page"]::after { transform: scaleX(1); }
 
   /* ---------- page ---------- */
-  main { max-width: 780px; margin: 0 auto; padding: clamp(40px, 8vw, 88px) clamp(16px, 4vw, 32px) 96px; }
-  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-  h1 { font-size: clamp(44px, 8vw, 80px); line-height: .95; letter-spacing: -.04em; margin: 12px 0 18px; }
-  .legend { font-family: var(--mono); font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
-
-  section { padding-top: 56px; margin-top: 56px; border-top: 1.5px solid var(--ink); }
-  h2 { font-size: 26px; letter-spacing: -.02em; margin: 8px 0 20px; }
-  h3 { font-family: var(--mono); font-size: 13px; font-weight: 500; margin: 24px 0 10px; }
-  p { margin: 0 0 12px; }
-  ul.list { list-style: none; }
-  ul.list li { padding: 10px 0; border-bottom: 1px solid var(--line); }
-  ul.list li:last-child { border-bottom: 0; }
-
-  .note { color: var(--muted); font-size: 15px; }
-  .updated { border-left: 3px solid var(--new); padding-left: 14px; }
-  .tag-new { font-family: var(--mono); font-size: 11px; color: var(--new); border: 1px solid var(--new); border-radius: 999px; padding: 1px 8px; }
-
-  /* status rows: name on the left, status pill on the right */
-  .rows { list-style: none; }
-  .rows li {
-    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px;
-    padding: 12px 0; border-bottom: 1px solid var(--line);
-  }
-  .rows li:last-child { border-bottom: 0; }
-  .rows small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
-  .pill {
-    flex-shrink: 0; font-family: var(--mono); font-size: 12px; white-space: nowrap;
-    border: 1.5px solid var(--ink); border-radius: 999px; padding: 3px 10px;
-  }
-  .pill.done { background: var(--ink); color: var(--bg); }
+  main { max-width: 720px; margin: 0 auto; padding: 48px clamp(16px, 4vw, 32px) 96px; }
+  h1 { font-size: 40px; letter-spacing: -.03em; margin-bottom: 8px; }
+  h2 { font-size: 22px; letter-spacing: -.01em; margin: 44px 0 12px; }
+  h3 { font-size: 16px; margin: 20px 0 6px; }
+  p { margin-bottom: 10px; }
+  ul { padding-left: 20px; }
+  li { margin-bottom: 6px; }
 
   footer {
     border-top: 1.5px solid var(--ink); padding: 28px clamp(16px, 4vw, 48px);
-    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
     font-family: var(--mono); font-size: 12px; color: var(--muted);
   }
 </style>
@@ -102,85 +76,63 @@
 </nav>
 
 <main>
-  <p class="eyebrow">M1</p>
   <h1>Milestone 1</h1>
-  <p class="legend"><span class="tag-new">updated</span> marks what changed since the last update.</p>
 
-  <section>
-    <p class="eyebrow">01</p>
-    <h2>Updates to MVP and stretch goals</h2>
-    <h3>MVP</h3>
-    <div class="updated">
-      <p><span class="tag-new">updated</span></p>
-      <p><strong>[VALIDATE]</strong> Prompt the User to ask to put their thumb on the PPG sensor in order to get super accurate data on the user's health biometrics.</p>
-      <p class="note"><strong>Reasoning:</strong> because we needed a way to validate the data. We received a sparksfun PPG sensor from Chavvi, which we will implement into the build as a validation source for testing and a calibration unit in the final design.</p>
-    </div>
-    <h3>Stretch</h3>
-    <p>The same.</p>
-  </section>
+  <h2>Updates to MVP and Stretch Goals</h2>
+  <h3>MVP</h3>
+  <p>[VALIDATE] Prompt the User to ask to put their thumb on the PPG sensor in order to get super accurate data on the user's health biometrics.</p>
+  <p>Reasoning: because we needed a way to validate the data. We received a sparksfun PPG sensor from Chavvi, which we will implement into the build as a validation source for testing and a calibration unit in the final design.</p>
+  <h3>Stretch</h3>
+  <p>The same.</p>
 
-  <section>
-    <p class="eyebrow">02</p>
-    <h2>Computational and hardware set-up</h2>
-    <p>All hardware sourced. All hardware booted up.</p>
-    <ul class="rows">
-      <li><span>rPPG sensor</span><span class="pill done">tested (+code)</span></li>
-      <li><span>Microphone / speaker</span><span class="pill done">tested (+code)</span></li>
-      <li><span>mmWave sensor</span><span class="pill">booted up</span></li>
-      <li><span>Raspberry Pi 5</span><span class="pill">booted up</span></li>
-      <li><span>XPT2064 3.5 inch display</span><span class="pill">booted up</span></li>
-      <li><span>PPG sensor</span><span class="pill">sourced (to code)</span></li>
-    </ul>
-  </section>
+  <h2>Status of Computational / Hardware Set-up</h2>
+  <p>All hardware sourced. All hardware booted up.</p>
+  <ul>
+    <li>rPPG sensor: tested (+code)</li>
+    <li>Microphone Speaker: tested (+code)</li>
+    <li>mmWave sensor: booted up</li>
+    <li>Raspberry Pi 5: booted up</li>
+    <li>XPT2064; 3.5 inch display: booted up</li>
+    <li>PPG sensor: sourced (to code)</li>
+  </ul>
 
-  <section>
-    <p class="eyebrow">03</p>
-    <h2>Major components and status</h2>
-    <ul class="rows">
-      <li><span>rPPG library (rPPG tools)</span><span class="pill">testing · proven on laptop cam</span></li>
-      <li><span>mmWave<small>Previously built on another project; adapting use</small></span><span class="pill">testing</span></li>
-      <li><span>Microphone / speaker<small>Previously built on another project; adapting use</small></span><span class="pill">troubleshooting</span></li>
-      <li><span>Display</span><span class="pill">implementation</span></li>
-      <li><span>PPG sensor</span><span class="pill">implementation</span></li>
-      <li><span>Raspberry Pi 5 setup</span><span class="pill done">done</span></li>
-      <li><span>Transcription, recognition, voice output<small>Whisper (transcription), TTS (Omnivoice). Previously built on another project; adapting use</small></span><span class="pill">testing</span></li>
-      <li><span>Integrate Arducam</span><span class="pill">implementing</span></li>
-    </ul>
-  </section>
+  <h2>Major Components and Status</h2>
+  <ul>
+    <li>rPPG library (rPPG tools): Testing (proven on laptop cam)</li>
+    <li>mmWave (prev built on another project; adapting use): Testing</li>
+    <li>Microphone/speaker (prev built on another project; adapting use): Troubleshooting</li>
+    <li>Display: Implementation</li>
+    <li>PPG sensor: Implementation</li>
+    <li>Raspberry Pi 5 setup: Done</li>
+    <li>Transcription, Recognition, Voice output (prev built on another project; adapting use), Whisper (transcription), TTS (Omnivoice): Testing</li>
+    <li>Integrate Arducam: Implementing</li>
+  </ul>
 
-  <section>
-    <p class="eyebrow">04</p>
-    <h2>Risks to reaching the MVP</h2>
-    <ul class="list">
-      <li>Need to setup PPG sensor to validate data</li>
-      <li>rPPG sensor still needs to be validated</li>
-    </ul>
-  </section>
+  <h2>Risks to Reaching MVP</h2>
+  <ul>
+    <li>Need to setup PPG sensor to validate data</li>
+    <li>rPPG sensor still needs to be validated</li>
+  </ul>
 
-  <section>
-    <p class="eyebrow">05</p>
-    <h2>Goals for Milestone 2</h2>
-    <h3>Electro-mechanical ends</h3>
-    <ul class="list">
-      <li>Created mechanical enclosure for the assistant</li>
-      <li>Setup PPG sensor</li>
-      <li>Hardware fully 3D printed</li>
-      <li>Fully completed electro-mechanical aspect</li>
-    </ul>
-    <h3>Software</h3>
-    <ul class="list">
-      <li>FSM halfway complete or fully complete</li>
-      <li>Look into fusing data from rPPG to mmWave</li>
-      <li>Have voicelines setup, have LLM logic setup, have microphone, speaker system setup</li>
-      <li>Setup voice commands</li>
-      <li>Default to potentiometer buttons if voice recognition fails for controls; removal of the microphone pipeline</li>
-    </ul>
-  </section>
+  <h2>Goals for Milestone 2</h2>
+  <h3>Electro-Mechanical Ends</h3>
+  <ul>
+    <li>Created mechanical enclosure for the assistant</li>
+    <li>Setup PPG sensor</li>
+    <li>Hardware fully 3D printed</li>
+    <li>Fully completed electro-mechanical aspect</li>
+  </ul>
+  <h3>Software</h3>
+  <ul>
+    <li>FSM halfway complete or fully complete</li>
+    <li>Look into fusing data from rPPG to mmWave</li>
+    <li>Have voicelines setup, have LLM logic setup, have microphone, speaker system setup</li>
+    <li>Setup voice commands</li>
+    <li>Default to potentiometer buttons if voice recognition fails for controls; Removal of the microphone pipeline</li>
+  </ul>
 </main>
 
-<footer>
-  <span>© <span id="year"></span> Baymax</span>
-</footer>
+<footer>© <span id="year"></span> Baymax</footer>
 <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
 </html>
