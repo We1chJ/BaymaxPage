@@ -55,6 +55,9 @@
   p { margin-bottom: 10px; }
   ul { padding-left: 20px; }
   li { margin-bottom: 6px; }
+  figure { margin: 10px 0 18px; }
+  figure img { display: block; max-width: 100%; max-height: 420px; height: auto; border: 1px solid #e4e4e4; }
+  figcaption { font-size: 13px; color: var(--muted); margin-top: 4px; }
 
   footer {
     border-top: 1.5px solid var(--ink); padding: 28px clamp(16px, 4vw, 48px);
@@ -88,9 +91,24 @@
   <h2>Status of Computational / Hardware Set-up</h2>
   <p>All hardware sourced. All hardware booted up.</p>
   <ul>
-    <li>rPPG sensor: tested (+code)</li>
-    <li>Microphone Speaker: tested (+code)</li>
-    <li>mmWave sensor: booted up</li>
+    <li>rPPG sensor: tested (+code)
+      <figure>
+        <img src="images/m1/rppg-heart-rate.png" alt="rPPG test: webcam feed with a face bounding box and a 75 BPM heart rate reading">
+        <figcaption>rPPG reading 75 BPM from a webcam feed.</figcaption>
+      </figure>
+    </li>
+    <li>Microphone Speaker: tested (+code)
+      <figure>
+        <img src="images/m1/mic-speaker-setup.webp" alt="Breadboard with an ESP32, an INMP441 microphone and a MAX98357A amplifier wired to a small speaker">
+        <figcaption>INMP441 microphone and MAX98357A amplifier driving the speaker from an ESP32.</figcaption>
+      </figure>
+    </li>
+    <li>mmWave sensor: booted up
+      <figure>
+        <img src="images/m1/mmwave-heart-rate.png" alt="Arduino sketch for the mmWave sensor and its serial monitor printing heart rate values between 89 and 98">
+        <figcaption>MR60BHA2 test sketch printing heart rate over serial.</figcaption>
+      </figure>
+    </li>
     <li>Raspberry Pi 5: booted up</li>
     <li>XPT2064; 3.5 inch display: booted up</li>
     <li>PPG sensor: sourced (to code)</li>
